@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGT Simone - Convite Especial</title>
+    <!-- Fontes Elegantes -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cor-vinho: #4a0e0e;
+            --cor-vinho-claro: #631616;
+            --cor-ouro: #d4af37;
+            --cor-ouro-brilho: #f2d479;
+            --cor-texto: #fdf5e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a0505;
+            background-image: 
+                radial-gradient(circle at center, var(--cor-vinho-claro) 0%, #1a0505 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--cor-texto);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        .nome-topo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            letter-spacing: 5px;
+            color: var(--cor-ouro);
+            text-transform: uppercase;
+            margin: 0;
+            border-bottom: 1px solid rgba(211, 175, 55, 0.3);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .frase-tema {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            line-height: 1.4;
+            color: rgba(253, 245, 230, 0.85);
+        }
+
+        .card-convite {
+            position: relative;
+            background: var(--cor-vinho);
+            border: 2px solid var(--cor-ouro);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            margin-bottom: 30px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .imagem-principal {
+            width: 100%;
+            display: none;
+            filter: contrast(105%);
+        }
+
+        .container-espera {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .loader {
+            border: 3px solid rgba(212, 175, 55, 0.1);
+            border-top: 3px solid var(--cor-ouro);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .btn-interativo {
+            background: linear-gradient(135deg, var(--cor-ouro), var(--cor-ouro-brilho));
+            color: var(--cor-vinho);
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+            animation: pulsar 2s infinite;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+        @keyframes pulsar {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        /* Efeito de piscar suave para a mensagem de atenção */
+        .msg-alerta-pulsante {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--cor-ouro-brilho);
+            font-weight: 600;
+            animation: softBlink 3s ease-in-out infinite;
+        }
+
+        @keyframes softBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .painel-info {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-top: 0;
+            opacity: 0;
+        }
+
+        .painel-info.aberto {
+            max-height: 3000px;
+            margin-top: 25px;
+            padding: 25px;
+            opacity: 1;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .info-item {
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--cor-ouro);
+            padding-left: 15px;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--cor-ouro);
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .info-valor {
+            font-size: 1rem;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .pix-box {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px dashed var(--cor-ouro);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .pix-chave {
+            font-family: monospace;
+            font-size: 1.2rem;
+            display: block;
+            margin: 10px 0;
+            color: var(--cor-ouro-brilho);
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .btn-copiar {
+            background: var(--cor-ouro);
+            color: var(--cor-vinho);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .btn-copiar:active { transform: scale(0.95); }
+
+        .btn-confirmar {
+            display: block;
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+            color: var(--cor-vinho);
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .vinho-decor {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .btn-link-externo {
+            color: var(--cor-ouro);
+            text-decoration: underline;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vinho-decor" style="top: 10%; left: -50px; font-size: 8rem;">🍷</div>
+    <div class="vinho-decor" style="bottom: 10%; right: -50px; font-size: 8rem;">🍇</div>
+
+    <div class="wrapper">
+        <header>
+            <h1 class="nome-topo">SGT Simone</h1>
+            <p class="frase-tema">"Como um bom vinho, quanto mais velho melhor. <br>Celebrando a melhor safra da vida."</p>
+        </header>
+
+        <main>
+            <div class="card-convite">
+                <img src="https://lh3.googleusercontent.com/d/1SlNbFAAM_ePnJKydZYqNd6EgypvJyMop" 
+                     alt="Convite SGT Simone" 
+                     class="imagem-principal" 
+                     id="foto-convite"
+                     onload="exibirImagem()"
+                     onerror="erroImagem()">
+                
+                <div id="status-carregamento" class="container-espera">
+                    <div class="loader"></div>
+                    <p style="font-size: 0.9rem; color: var(--cor-ouro);">A preparar o seu convite...</p>
+                </div>
+
+                <div id="status-erro" class="container-espera" style="display:none;">
+                    <p style="font-size: 0.9rem; color: var(--cor-ouro);">🍷<br>Não foi possível carregar a arte automaticamente.</p>
+                    <a href="https://drive.google.com/file/d/1SlNbFAAM_ePnJKydZYqNd6EgypvJyMop/view?usp=sharing" target="_blank" class="btn-link-externo">
+                        Clique aqui para visualizar a imagem
+                    </a>
+                </div>
+            </div>
+
+            <button class="btn-interativo" onclick="toggleInfo()" id="main-btn">
+                Clique aqui - Maiores Informações
+            </button>
+
+            <div id="box-info" class="painel-info">
+                
+                <div class="info-item">
+                    <span class="info-label">Horários</span>
+                    <span class="info-valor">
+                        Início da Festa: 19:00h<br>
+                        Serviço de Buffet: 20:00h às 01:00h
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Onde</span>
+                    <span class="info-valor">Clube da ASPRA Vera Cruz<br><small>Rua Leopoldo Gomes 1380, Bairro Vera Cruz</small></span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Adesão por convidado</span>
+                    <span class="info-valor">
+                        • Maiores de 14 anos: <strong>R$ 75,00</strong><br>
+                        • Até 14 anos: <strong>Entrada Grátis</strong>
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">O que inclui</span>
+                    <span class="info-valor">Buffet completo, bebidas não alcoólicas e Chopp.</span>
+                </div>
+
+                <div class="info-item" style="border-color: #fff;">
+                    <span class="info-label" style="color: #fff;">Bebidas Extras</span>
+                    <span class="info-valor">Fique à vontade para trazer qualquer outra bebida da sua preferência.</span>
+                </div>
+
+                <div class="pix-box">
+                    <span class="info-label" style="text-align: center;">Pagamento via PIX</span>
+                    <span class="pix-chave" id="chave-pix">31987260681</span>
+                    <span class="info-valor" style="font-size: 0.85rem; display: block; text-align: center; margin-bottom: 10px;">
+                        Favorecido: Simone Luis da Silva
+                    </span>
+                    <button class="btn-copiar" onclick="copiarPix(this)">Copiar Chave</button>
+                </div>
+
+                <p class="msg-alerta-pulsante">
+                    ⚠️ ATENÇÃO: O pagamento e a confirmação devem ser realizados até o dia 24/05/2026 para fechamento do buffet.
+                </p>
+
+                <p style="font-size: 0.85rem; margin-top: 15px;">
+                    Preencha o formulário e <strong>anexe o comprovante</strong>:
+                </p>
+                
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQaksx_a0YZ5DmVUpnvjLEUrL6YumkmdVPZNRO1jd5ehZg8g/viewform" class="btn-confirmar" target="_blank">
+                    Confirmar Presença
+                </a>
+            </div>
+        </main>
+
+        <footer style="margin-top: 30px; opacity: 0.5; font-size: 0.7rem; padding-bottom: 30px;">
+            SGT Simone &copy; 2026
+        </footer>
+    </div>
+
+    <script>
+        function exibirImagem() {
+            document.getElementById('foto-convite').style.display = 'block';
+            document.getElementById('status-carregamento').style.display = 'none';
+        }
+
+        function erroImagem() {
+            document.getElementById('status-carregamento').style.display = 'none';
+            document.getElementById('status-erro').style.display = 'block';
+        }
+
+        function toggleInfo() {
+            const painel = document.getElementById('box-info');
+            const btn = document.getElementById('main-btn');
+            painel.classList.toggle('aberto');
+            
+            if (painel.classList.contains('aberto')) {
+                btn.innerHTML = "Fechar Detalhes";
+                setTimeout(() => {
+                    painel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 400);
+            } else {
+                btn.innerHTML = "Clique aqui - Maiores Informações";
+            }
+        }
+
+        function copiarPix(btn) {
+            const chave = document.getElementById('chave-pix').innerText;
+            const tempInput = document.createElement("input");
+            tempInput.value = chave;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Copiado!";
+            btn.style.background = "#fff";
+            setTimeout(() => { 
+                btn.innerHTML = originalText;
+                btn.style.background = "var(--cor-ouro)";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
